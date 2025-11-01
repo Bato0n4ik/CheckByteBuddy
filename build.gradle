@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.andrew'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    //implementation 'org.projectlombok:lombok:1.18.42'
+    implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
+    implementation 'org.hibernate:hibernate-core:7.1.4.Final'
+    implementation 'net.bytebuddy:byte-buddy:1.17.8'
+    implementation 'org.postgresql:postgresql:42.7.8'
+
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

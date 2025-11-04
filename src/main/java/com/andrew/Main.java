@@ -17,6 +17,7 @@ import org.hibernate.cfg.Configuration;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Main {
@@ -50,9 +51,14 @@ public class Main {
                 .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class)
                 .newInstance(userRepository, userMapper, userCreateMapper);
 
+        System.out.println();
 
-        userService.create(new UserCreateDto("bato0n4ik.47@gmail.com", String.valueOf("12345".hashCode()), LocalDate.now())).ifPresent(System.out::println);
+
+        userService.create(new UserCreateDto("bato0n4ik.47@gmail.com", String.valueOf("12gtr345".hashCode()), LocalDate.now())).ifPresent(System.out::println);
+
+        System.out.println();
 
         userService.findById(1L).ifPresent(System.out::println);
+
     }
 }

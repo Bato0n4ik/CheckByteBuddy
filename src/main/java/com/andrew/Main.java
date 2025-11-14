@@ -54,7 +54,7 @@ public class Main {
         System.out.println();
 
 
-        userService.create(new UserCreateDto("bato0n4ik.47@gmail.com", String.valueOf("12gtr345".hashCode()), LocalDate.now())).ifPresent(System.out::println);
+        userService.create(new UserCreateDto("bato0n4ik.47@gmail.com", "12345", LocalDate.of(1998, 9,1))).ifPresent(System.out::println);
 
         System.out.println();
 

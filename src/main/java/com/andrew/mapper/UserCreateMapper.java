@@ -3,6 +3,8 @@ package com.andrew.mapper;
 import com.andrew.dto.UserCreateDto;
 import com.andrew.entity.User;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class UserCreateMapper implements Mapper<UserCreateDto, User> {
 
     @Override

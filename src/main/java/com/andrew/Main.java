@@ -17,7 +17,6 @@ import org.hibernate.cfg.Configuration;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Main {
@@ -28,37 +27,37 @@ public class Main {
                 .buildSessionFactory();
 
 
-
-        Session session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class<?>[]{Session.class},(proxy, method, args1) -> {
-            return method.invoke(sessionFactory.openSession(), args1);
-        });
-
-        TransactionInterceptor myOwnInterceptor = new TransactionInterceptor(sessionFactory);
-
-        UserRepository userRepository = new UserRepository(session);
-
-        UserReadMapper userMapper = new UserReadMapper();
-
-        UserCreateMapper userCreateMapper = new UserCreateMapper();
-
-        var userService = new ByteBuddy()
-                .subclass(UserService.class)
-                .method(ElementMatchers.any())
-                .intercept(MethodDelegation.to(myOwnInterceptor))
-                .make()
-                .load(UserService.class.getClassLoader())
-                .getLoaded()
-                .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class)
-                .newInstance(userRepository, userMapper, userCreateMapper);
-
-        System.out.println();
+        //ByteBuddy work only with PROXY on Session  class,
+        // not with original Session received from sessionFactory.openSession()
+        // and not with sessionFactory.getCurrentSession()
+        // In all cases except for the proxy for the current session, it closed the session!!!
+        Session session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
+                (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
 
 
-        userService.create(new UserCreateDto("bato0n4ik.47@gmail.com", "12345", LocalDate.of(1998, 9,1))).ifPresent(System.out::println);
+        try(session){
 
-        System.out.println();
+            TransactionInterceptor myOwnInterceptor = new TransactionInterceptor(sessionFactory);
 
-        userService.findById(1L).ifPresent(System.out::println);
+            UserRepository userRepository = new UserRepository(session);
+
+            UserReadMapper userReadMapper = new UserReadMapper();
+
+            UserCreateMapper userCreateMapper = new UserCreateMapper();
+
+            var userService = new ByteBuddy()
+                     .subclass(UserService.class)
+                     .method(ElementMatchers.any())
+                     .intercept(MethodDelegation.to(myOwnInterceptor))
+                     .make()
+                     .load(UserService.class.getClassLoader())
+                     .getLoaded()
+                     .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class/*, Session.class*/)
+                     .newInstance(userRepository, userReadMapper, userCreateMapper/*,session*/ );
+
+            userService.create(new UserCreateDto("nikita.47@gmail.com", "1234",  LocalDate.of(2003, 1,24))).ifPresent(System.out::println);
+            userService.findById(1L).ifPresentOrElse(val -> System.out.println("Found user with id: " + val.id()), () -> System.out.println("Data Base not have  user with that id"));
+        }
 
     }
 }

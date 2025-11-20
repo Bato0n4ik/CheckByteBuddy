@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDate;
 
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,11 +15,11 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String name;
@@ -28,6 +27,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
+
     private LocalDate birthday;
 
 }

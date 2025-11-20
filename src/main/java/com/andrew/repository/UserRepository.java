@@ -1,23 +1,12 @@
 package com.andrew.repository;
 
 import com.andrew.entity.User;
-import jakarta.persistence.EntityManager;
+import org.hibernate.Session;
 
 
-public class UserRepository {
+public class UserRepository extends BaseRepository<Long, User>{
 
-    private final EntityManager entityManager;
-
-    public UserRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    public User findById (Long id) {
-        return entityManager.find(User.class, id);
-    }
-
-    public User create(User user) {
-        entityManager.persist(user);
-        return user;
+    public UserRepository(Session session) {
+        super(User.class, session);
     }
 }

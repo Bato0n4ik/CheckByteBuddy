@@ -1,4 +1,4 @@
-2025-11-04 04:03:36.859 [main] INFO  c.a.I.TransactionInterceptor - Transaction is being opened
-2025-11-04 04:03:36.883 [main] INFO  c.a.I.TransactionInterceptor - Transaction committed
-2025-11-04 04:03:36.893 [main] INFO  c.a.I.TransactionInterceptor - Transaction is being opened
-2025-11-04 04:03:37.048 [main] INFO  c.a.I.TransactionInterceptor - Transaction committed
+2025-11-20 06:49:24.076 [main] INFO  c.a.I.TransactionInterceptor - Transaction is being opened on method: create, transaction status: ACTIVE
+2025-11-20 06:49:24.167 [main] INFO  c.a.I.TransactionInterceptor - Transaction committed on method: create, transaction status: COMMITTED
+2025-11-20 06:49:24.173 [main] INFO  c.a.I.TransactionInterceptor - Transaction is being opened on method: findById, transaction status: ACTIVE
+2025-11-20 06:49:24.214 [main] INFO  c.a.I.TransactionInterceptor - Transaction committed on method: findById, transaction status: COMMITTED

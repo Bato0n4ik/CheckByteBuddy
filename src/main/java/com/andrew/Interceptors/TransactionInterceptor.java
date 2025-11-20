@@ -23,6 +23,7 @@ public class TransactionInterceptor {
         this.sessionFactory = sessionFactory;
     }
 
+
     @RuntimeType
     public Object intercept(@SuperCall Callable<Object> callable, @Origin Method method) throws Exception {
         Object result = null;
@@ -33,14 +34,14 @@ public class TransactionInterceptor {
             if(!transaction.isActive()) {
                 transaction.begin();
                 openTransaction = true;
-                log.info("Transaction is being opened");
+                log.info("Transaction is being opened on method: {}, transaction status: {}", method.getName(), transaction.getStatus());
             }
         }
         try{
             result = callable.call();
             if(openTransaction) {
                 transaction.commit();
-                log.info("Transaction committed");
+                log.info("Transaction committed on method: {}, transaction status: {}", method.getName(), transaction.getStatus());
             }
         }
         catch(Exception e){
